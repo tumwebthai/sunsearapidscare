@@ -26,6 +26,31 @@ interface Props {
 const LIBRARIES: ('places')[] = ['places']
 const BANGKOK = { lat: 13.7563, lng: 100.5018 }
 
+interface NearbyPlace {
+  name: string
+  vicinity: string
+  lat: number
+  lng: number
+  icon?: string
+  types?: string[]
+}
+
+/* ── Place type → Thai label ── */
+function getPlaceTypeLabel(types: string[] | undefined): string {
+  if (!types) return '📍'
+  if (types.includes('airport')) return '✈️'
+  if (types.includes('hotel') || types.includes('lodging')) return '🏨'
+  if (types.includes('restaurant') || types.includes('food')) return '🍽️'
+  if (types.includes('hospital')) return '🏥'
+  if (types.includes('shopping_mall') || types.includes('store')) return '🛍️'
+  if (types.includes('gas_station')) return '⛽'
+  if (types.includes('transit_station') || types.includes('bus_station') || types.includes('train_station')) return '🚉'
+  if (types.includes('school') || types.includes('university')) return '🎓'
+  if (types.includes('temple') || types.includes('place_of_worship')) return '🛕'
+  if (types.includes('park')) return '🌳'
+  return '📍'
+}
+
 const DARK_MAP_STYLE: google.maps.MapTypeStyle[] = [
   { elementType: 'geometry', stylers: [{ color: '#0F1B2E' }] },
   { elementType: 'labels.text.stroke', stylers: [{ color: '#0B1C2D' }] },
@@ -64,10 +89,14 @@ export default function LocationPicker({
   const [markerPos, setMarkerPos] = useState(BANGKOK)
   const [mapAddress, setMapAddress] = useState('')
   const [isGeolocating, setIsGeolocating] = useState(false)
+  const [isReverseGeocoding, setIsReverseGeocoding] = useState(false)
+  const [nearbyPlaces, setNearbyPlaces] = useState<NearbyPlace[]>([])
+  const [isSearchingNearby, setIsSearchingNearby] = useState(false)
 
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null)
   const mapRef = useRef<google.maps.Map | null>(null)
   const geocoderRef = useRef<google.maps.Geocoder | null>(null)
+  const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null)
 
   // Initialize geocoder when loaded
   useEffect(() => {
@@ -98,14 +127,56 @@ export default function LocationPicker({
     }
   }, [onChange])
 
-  /* ── Reverse geocode ── */
+  /* ── Reverse geocode (Thai language, prefer named places) ── */
   const reverseGeocode = useCallback((lat: number, lng: number) => {
     if (!geocoderRef.current) return
-    geocoderRef.current.geocode({ location: { lat, lng } }, (results, status) => {
-      if (status === 'OK' && results && results[0]) {
-        setMapAddress(results[0].formatted_address)
-      } else {
-        setMapAddress(`${lat.toFixed(5)}, ${lng.toFixed(5)}`)
+    setIsReverseGeocoding(true)
+    geocoderRef.current.geocode(
+      { location: { lat, lng }, language: 'th' } as google.maps.GeocoderRequest,
+      (results, status) => {
+        setIsReverseGeocoding(false)
+        if (status === 'OK' && results && results.length > 0) {
+          // Prefer: premise > street_address > route > establishment > neighborhood > sublocality
+          const typeOrder = ['premise', 'street_address', 'route', 'establishment', 'neighborhood', 'sublocality', 'locality']
+          let best = results[0]
+          for (const preferredType of typeOrder) {
+            const match = results.find(r => r.types.includes(preferredType))
+            if (match) { best = match; break }
+          }
+          setMapAddress(best.formatted_address)
+        } else {
+          setMapAddress(`${lat.toFixed(5)}, ${lng.toFixed(5)}`)
+        }
+      }
+    )
+  }, [])
+
+  /* ── Search nearby places ── */
+  const searchNearby = useCallback((lat: number, lng: number) => {
+    if (!placesServiceRef.current) return
+    setIsSearchingNearby(true)
+    setNearbyPlaces([])
+
+    const request: google.maps.places.PlaceSearchRequest = {
+      location: new google.maps.LatLng(lat, lng),
+      radius: 500,
+      language: 'th',
+    } as google.maps.places.PlaceSearchRequest
+
+    placesServiceRef.current.nearbySearch(request, (results, status) => {
+      setIsSearchingNearby(false)
+      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+        const places: NearbyPlace[] = results
+          .filter(p => p.name && p.geometry?.location)
+          .slice(0, 5)
+          .map(p => ({
+            name: p.name || '',
+            vicinity: p.vicinity || '',
+            lat: p.geometry!.location!.lat(),
+            lng: p.geometry!.location!.lng(),
+            types: p.types || undefined,
+          }))
+        setNearbyPlaces(places)
       }
     })
   }, [])
@@ -113,6 +184,7 @@ export default function LocationPicker({
   /* ── Map handlers ── */
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map
+    placesServiceRef.current = new google.maps.places.PlacesService(map)
   }, [])
 
   const onMarkerDragEnd = useCallback((e: google.maps.MapMouseEvent) => {
@@ -127,6 +199,7 @@ export default function LocationPicker({
   const openMap = () => {
     setShowMap(true)
     setMapAddress('')
+    setNearbyPlaces([])
     // If we already have coordinates from a previous selection, use them
     reverseGeocode(markerPos.lat, markerPos.lng)
   }
@@ -157,6 +230,7 @@ export default function LocationPicker({
           mapRef.current.setZoom(15)
         }
         reverseGeocode(lat, lng)
+        searchNearby(lat, lng)
         setIsGeolocating(false)
       },
       () => {
@@ -164,6 +238,16 @@ export default function LocationPicker({
       },
       { enableHighAccuracy: true, timeout: 8000 }
     )
+  }
+
+  /* ── Select a nearby place ── */
+  const selectNearbyPlace = (place: NearbyPlace) => {
+    setMarkerPos({ lat: place.lat, lng: place.lng })
+    if (mapRef.current) {
+      mapRef.current.panTo({ lat: place.lat, lng: place.lng })
+      mapRef.current.setZoom(16)
+    }
+    setMapAddress(`${place.name} — ${place.vicinity}`)
   }
 
   /* ── Clear selection ── */
@@ -383,9 +467,21 @@ export default function LocationPicker({
               </button>
             </div>
 
-            {/* Footer: address + confirm button */}
-            <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(198,167,94,0.15)' }}>
-              {mapAddress && (
+            {/* Footer: address + nearby + confirm button */}
+            <div style={{ padding: '16px 20px', borderTop: '1px solid rgba(198,167,94,0.15)', maxHeight: '45%', overflowY: 'auto' }}>
+              {/* Current address or loading state */}
+              {isReverseGeocoding ? (
+                <div style={{
+                  marginBottom: 12, padding: '10px 14px',
+                  background: 'rgba(198,167,94,0.08)',
+                  border: '1px solid rgba(198,167,94,0.15)',
+                  borderRadius: 10, fontSize: 13, color: '#9CA3AF', lineHeight: 1.5,
+                  display: 'flex', alignItems: 'center', gap: 8,
+                }}>
+                  <div style={{ width: 14, height: 14, border: '2px solid #C6A75E', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', flexShrink: 0 }} />
+                  กำลังค้นหาสถานที่...
+                </div>
+              ) : mapAddress ? (
                 <div style={{
                   marginBottom: 12, padding: '10px 14px',
                   background: 'rgba(198,167,94,0.08)',
@@ -394,7 +490,73 @@ export default function LocationPicker({
                 }}>
                   📍 {mapAddress}
                 </div>
+              ) : null}
+
+              {/* Nearby places list */}
+              {isSearchingNearby && (
+                <div style={{
+                  marginBottom: 12, padding: '10px 14px',
+                  fontSize: 13, color: '#9CA3AF',
+                  display: 'flex', alignItems: 'center', gap: 8,
+                }}>
+                  <div style={{ width: 14, height: 14, border: '2px solid #C6A75E', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', flexShrink: 0 }} />
+                  กำลังค้นหาสถานที่ใกล้เคียง...
+                </div>
               )}
+
+              {nearbyPlaces.length > 0 && (
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#C6A75E', marginBottom: 8 }}>
+                    📋 สถานที่ใกล้เคียง
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {nearbyPlaces.map((place, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => selectNearbyPlace(place)}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '10px 12px',
+                          background: 'rgba(26,47,69,0.6)',
+                          border: '1px solid rgba(198,167,94,0.1)',
+                          borderRadius: 10,
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: 10,
+                          color: '#FFFFFF',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'rgba(198,167,94,0.12)'
+                          e.currentTarget.style.borderColor = 'rgba(198,167,94,0.3)'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'rgba(26,47,69,0.6)'
+                          e.currentTarget.style.borderColor = 'rgba(198,167,94,0.1)'
+                        }}
+                      >
+                        <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0, marginTop: 1 }}>
+                          {getPlaceTypeLabel(place.types)}
+                        </span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {place.name}
+                          </div>
+                          {place.vicinity && (
+                            <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2, lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {place.vicinity}
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={confirmMapSelection}

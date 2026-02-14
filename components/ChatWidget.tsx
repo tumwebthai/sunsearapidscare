@@ -71,8 +71,10 @@ export default function ChatWidget() {
   const [isLoading, setIsLoading] = useState(false)
   const [showQuickReplies, setShowQuickReplies] = useState(true)
   const [lastSentTime, setLastSentTime] = useState(0)
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
   const chatEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const chatBodyRef = useRef<HTMLDivElement>(null)
 
   // Don't render on admin pages
   if (pathname.startsWith('/admin')) return null
@@ -98,6 +100,29 @@ export default function ChatWidget() {
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 300)
+    }
+  }, [isOpen])
+
+  // iOS keyboard detection via visualViewport API
+  useEffect(() => {
+    if (!isOpen) return
+    const vv = window.visualViewport
+    if (!vv) return
+
+    const handleResize = () => {
+      const kbHeight = window.innerHeight - vv.height
+      setKeyboardHeight(kbHeight > 50 ? kbHeight : 0)
+      // Auto-scroll chat to bottom when keyboard opens
+      if (kbHeight > 50) {
+        setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100)
+      }
+    }
+
+    vv.addEventListener('resize', handleResize)
+    vv.addEventListener('scroll', handleResize)
+    return () => {
+      vv.removeEventListener('resize', handleResize)
+      vv.removeEventListener('scroll', handleResize)
     }
   }, [isOpen])
 
@@ -209,7 +234,7 @@ export default function ChatWidget() {
             right: 20,
             bottom: 20,
             width: 380,
-            height: 520,
+            height: keyboardHeight > 0 ? `calc(100% - ${keyboardHeight}px)` : 520,
             borderRadius: 20,
             overflow: 'hidden',
             display: 'flex',
@@ -217,6 +242,7 @@ export default function ChatWidget() {
             boxShadow: '0 25px 80px rgba(0,0,0,0.5)',
             zIndex: 9999,
             animation: 'chatSlideUp 0.3s ease forwards',
+            top: keyboardHeight > 0 ? 0 : undefined,
           }}
         >
           {/* Header */}
@@ -275,12 +301,15 @@ export default function ChatWidget() {
           </div>
 
           {/* Chat Area */}
-          <div style={{
+          <div
+            ref={chatBodyRef}
+            style={{
             flex: 1,
             overflowY: 'auto',
             background: '#0F1B2E',
             padding: 16,
             scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch',
           }}>
             {/* Welcome message (always shown) */}
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
@@ -445,9 +474,10 @@ export default function ChatWidget() {
           </div>
 
           {/* Input Area */}
-          <div style={{
+          <div className="chat-input-area" style={{
             background: '#12263A',
-            padding: '12px 16px',
+            padding: keyboardHeight > 0 ? '8px 16px' : '12px 16px',
+            paddingBottom: keyboardHeight > 0 ? 8 : undefined,
             display: 'flex',
             gap: 12,
             alignItems: 'center',
@@ -459,6 +489,10 @@ export default function ChatWidget() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value.slice(0, 500))}
               onKeyDown={handleKeyDown}
+              onFocus={() => {
+                // iOS: scroll to bottom when input focused
+                setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 300)
+              }}
               placeholder="พิมพ์ข้อความ..."
               disabled={isLoading}
               style={{
@@ -468,7 +502,7 @@ export default function ChatWidget() {
                 borderRadius: 24,
                 padding: '12px 20px',
                 color: '#FFFFFF',
-                fontSize: 14,
+                fontSize: 16, // 16px prevents iOS auto-zoom
                 outline: 'none',
               }}
             />
@@ -476,8 +510,10 @@ export default function ChatWidget() {
               onClick={() => handleSubmit()}
               disabled={!inputValue.trim() || isLoading}
               style={{
-                width: 40,
-                height: 40,
+                width: 44,
+                height: 44,
+                minWidth: 44,
+                minHeight: 44,
                 borderRadius: '50%',
                 background: !inputValue.trim() || isLoading
                   ? 'rgba(198,167,94,0.3)'
@@ -489,6 +525,7 @@ export default function ChatWidget() {
                 justifyContent: 'center',
                 flexShrink: 0,
                 transition: 'all 0.2s',
+                WebkitTapHighlightColor: 'transparent',
               }}
             >
               <SendSVG />
@@ -537,8 +574,14 @@ export default function ChatWidget() {
             right: 0 !important;
             bottom: 0 !important;
             width: 100% !important;
-            height: 100% !important;
+            height: 100dvh !important;
             border-radius: 0 !important;
+          }
+        }
+        /* iOS safe area: keep input above home bar */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+          .chat-input-area {
+            padding-bottom: calc(8px + env(safe-area-inset-bottom)) !important;
           }
         }
       `}</style>
