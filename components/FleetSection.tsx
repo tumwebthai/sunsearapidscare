@@ -38,14 +38,16 @@ export default function FleetSection() {
   const renderCard = (car: typeof fleet[0], i: number) => (
     <Link href={`/fleet/${car.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="card-navy" style={{ padding: 0, position: 'relative', overflow: 'hidden', cursor: 'pointer' }}>
-        <div style={{ position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', overflow: 'hidden', aspectRatio: '16 / 10', background: 'linear-gradient(to bottom, #1A2F45, #0F1B2E)' }}>
           <Image
             src={car.image}
             alt={`${car.name} ${car.type} - เช่ารถตู้ VIP พร้อมคนขับ`}
-            width={800} height={500} quality={85}
+            fill
+            quality={85}
             loading={i < 3 ? 'eager' : 'lazy'}
             className="fleet-car-image"
-            style={{ width: '100%', height: 220, objectFit: 'cover', display: 'block', transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
+            sizes="(max-width: 639px) 75vw, (max-width: 1023px) 45vw, 370px"
+            style={{ objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
           />
           <span style={{ position: 'absolute', top: 12, left: 12, background: car.badgeColor, color: '#FFFFFF', padding: '5px 14px', borderRadius: 50, fontSize: 11, fontWeight: 700, letterSpacing: 1, boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
             {car.badge}

@@ -1,6 +1,50 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { mergeSocialLinks } from '@/lib/social'
+import type { SocialLink } from '@/lib/social'
+
+function SocialIcon({ s, size = 32 }: { s: SocialLink; size?: number }) {
+  const bg = s.bgGradient || s.color
+  return (
+    <a
+      href={s.href}
+      target={s.href.startsWith('http') ? '_blank' : undefined}
+      rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+      title={s.name}
+      className="social-icon-btn"
+      style={{
+        width: size + 12,
+        height: size + 12,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '50%',
+        background: bg,
+        color: s.name === 'Lemon8' ? '#0B1C2D' : '#FFFFFF',
+        textDecoration: 'none',
+        transition: 'transform 0.2s, filter 0.2s',
+        flexShrink: 0,
+      }}
+    >
+      <svg viewBox="0 0 24 24" width={size * 0.55} height={size * 0.55} dangerouslySetInnerHTML={{ __html: s.svg }} />
+    </a>
+  )
+}
+
 export default function Footer() {
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>(() => mergeSocialLinks({}))
+
+  useEffect(() => {
+    fetch('/api/settings/social')
+      .then((r) => r.json())
+      .then((urls) => setSocialLinks(mergeSocialLinks(urls)))
+      .catch(() => {})
+  }, [])
+
+  const contactLinks = socialLinks.filter((s) => s.group === 'contact')
+  const followLinks = socialLinks.filter((s) => s.group === 'follow')
+
   return (
     <footer style={{ position: 'relative', overflow: 'hidden', background: '#0B1C2D' }}>
       {/* Top gold ornamental line */}
@@ -26,17 +70,26 @@ export default function Footer() {
           <p style={{ fontSize: 14, color: '#9CA3AF', lineHeight: 1.8, marginBottom: 24 }}>
             บริการเช่ารถตู้ VIP พร้อมคนขับมืออาชีพ รับส่งสนามบิน ท่องเที่ยวทั่วไทย มาตรฐานพรีเมียม ปลอดภัย ตรงเวลา
           </p>
-          <div style={{ display: 'flex', gap: 12 }}>
-            {[
-              { icon: '💬', label: 'LINE', href: 'https://line.me/R/ti/p/@sunsearapidscare' },
-              { icon: '📘', label: 'Facebook', href: '#' },
-              { icon: '📱', label: 'WhatsApp', href: 'https://wa.me/66812345678' },
-            ].map((s, i) => (
-              <a key={i} href={s.href} title={s.label} style={{ width: 42, height: 42, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10, border: '1px solid rgba(198,167,94,0.2)', background: 'rgba(198,167,94,0.05)', textDecoration: 'none', fontSize: 18, transition: 'all 0.3s' }}>
-                {s.icon}
-              </a>
-            ))}
-          </div>
+
+          {/* Social Icons — ติดต่อเรา */}
+          {contactLinks.length > 0 && (
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: '#C6A75E', letterSpacing: 1, marginBottom: 10, textTransform: 'uppercase' }}>ติดต่อเรา</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {contactLinks.map((s) => <SocialIcon key={s.name} s={s} size={32} />)}
+              </div>
+            </div>
+          )}
+
+          {/* Social Icons — ติดตามเรา */}
+          {followLinks.length > 0 && (
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: '#C6A75E', letterSpacing: 1, marginBottom: 10, textTransform: 'uppercase' }}>ติดตามเรา</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {followLinks.map((s) => <SocialIcon key={s.name} s={s} size={32} />)}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Col 2: Service Links */}
@@ -72,7 +125,7 @@ export default function Footer() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {[
               { icon: '📍', text: 'กรุงเทพมหานคร, ประเทศไทย' },
-              { icon: '📞', text: '081-234-5678' },
+              { icon: '📞', text: '084-289-4662' },
               { icon: '📧', text: 'info@sunsearapidscare.com' },
               { icon: '💬', text: 'LINE: @sunsearapidscare' },
             ].map((item, i) => (
@@ -107,16 +160,39 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 24px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>© 2026 SunSeaRapidsCare. สงวนลิขสิทธิ์ทุกประการ</div>
+        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>&copy; 2026 SunSeaRapidsCare. สงวนลิขสิทธิ์ทุกประการ</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 20, height: 1, background: 'rgba(198,167,94,0.2)' }} />
           <div style={{ width: 6, height: 6, background: '#C6A75E', transform: 'rotate(45deg)', opacity: 0.4 }} />
           <div style={{ width: 20, height: 1, background: 'rgba(198,167,94,0.2)' }} />
         </div>
         <a href="#hero" style={{ fontSize: 12, color: 'rgba(198,167,94,0.5)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, transition: 'color 0.3s' }}>
-          กลับด้านบน ↑
+          กลับด้านบน &uarr;
         </a>
       </div>
+
+      <style>{`
+        .social-icon-btn:hover {
+          transform: scale(1.15);
+          filter: brightness(1.2);
+        }
+        @media (max-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          .footer-col-center {
+            border-left: none !important;
+            border-right: none !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-top: 1px solid rgba(198,167,94,0.12);
+            border-bottom: 1px solid rgba(198,167,94,0.12);
+            padding-top: 32px;
+            padding-bottom: 32px;
+          }
+        }
+      `}</style>
     </footer>
   )
 }

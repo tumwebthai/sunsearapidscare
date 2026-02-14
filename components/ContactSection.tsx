@@ -6,9 +6,9 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      style={{ padding: '120px 24px', background: '#0B1C2D', position: 'relative', textAlign: 'center' }}
+      style={{ padding: '120px 24px', background: '#0B1C2D', position: 'relative', textAlign: 'center', overflow: 'hidden' }}
     >
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 600, height: 600, background: 'radial-gradient(circle, rgba(198,167,94,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', maxWidth: 600, height: 600, background: 'radial-gradient(circle, rgba(198,167,94,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', maxWidth: 600, margin: '0 auto' }}>
         <RevealSection>

@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Footer from '@/components/Footer'
 import StickyBottomNav from '@/components/StickyBottomNav'
 import VehicleFaq from './VehicleFaq'
+import ShareButtons from './ShareButtons'
 
 export function generateStaticParams() {
   return FLEET.map((v) => ({ slug: v.slug }))
@@ -164,6 +165,11 @@ export default function VehiclePage({ params }: { params: { slug: string } }) {
                 >
                   📞 {PHONE}
                 </a>
+              </div>
+
+              {/* Share Buttons */}
+              <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(198,167,94,0.1)' }}>
+                <ShareButtons vehicleName={v.name} vehicleType={v.type} price={v.price} />
               </div>
             </div>
           </div>

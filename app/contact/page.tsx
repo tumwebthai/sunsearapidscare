@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { SITE_NAME, SITE_URL, LINE_URL, PHONE, PHONE_RAW, WHATSAPP_URL, EMAIL } from '@/lib/data'
+import { getSocialLinks } from '@/lib/social-links'
 import Navbar from '@/components/Navbar'
 import Breadcrumb from '@/components/Breadcrumb'
 import Footer from '@/components/Footer'
 import StickyBottomNav from '@/components/StickyBottomNav'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: `ติดต่อเรา | ${SITE_NAME} — จองรถ สอบถามราคา`,
@@ -72,7 +75,10 @@ const HOURS = [
   { day: 'อีเมล', time: 'ตอบกลับภายใน 1 ชม.' },
 ]
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const allSocials = await getSocialLinks()
+  const contactSocials = allSocials.filter((s) => s.group === 'contact')
+  const followSocials = allSocials.filter((s) => s.group === 'follow')
   const localBusinessJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -151,6 +157,112 @@ export default function ContactPage() {
             ))}
           </div>
 
+          {/* ═══ ช่องทางออนไลน์ ═══ */}
+          <div style={{ marginBottom: 60 }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }}>
+              ช่องทาง<span style={{ color: '#C6A75E' }}>ออนไลน์</span>
+            </h2>
+            <p style={{ color: '#9CA3AF', fontSize: 14, textAlign: 'center', marginBottom: 32 }}>ติดต่อและติดตามเราได้ทุกแพลตฟอร์ม</p>
+
+            {/* ติดต่อเรา */}
+            <div style={{ marginBottom: 32 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#C6A75E', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 16 }}>ติดต่อเรา</div>
+              <div className="social-contact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+                {contactSocials.map((s) => (
+                  <a
+                    key={s.name}
+                    href={s.href}
+                    target={s.href.startsWith('http') ? '_blank' : undefined}
+                    rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="social-contact-item"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 16,
+                      padding: '16px 20px',
+                      background: '#12263A',
+                      borderRadius: 14,
+                      border: '1px solid rgba(198,167,94,0.08)',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <div style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: '50%',
+                      background: s.bgGradient || s.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      color: s.name === 'Lemon8' ? '#0B1C2D' : '#FFFFFF',
+                    }}>
+                      <svg viewBox="0 0 24 24" width={22} height={22} dangerouslySetInnerHTML={{ __html: s.svg }} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#FFFFFF' }}>{s.name}</div>
+                      <div style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>
+                        {s.name === 'LINE' && '@sunsearapidscare'}
+                        {s.name === 'Facebook' && 'SunSeaRapidsCare'}
+                        {s.name === 'WhatsApp' && '+66 84-289-4662'}
+                        {s.name === 'Phone' && '084-289-4662'}
+                        {s.name === 'Email' && 'info@sunsearapidscare.com'}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* ติดตามเรา */}
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#C6A75E', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 16 }}>ติดตามเรา</div>
+              <div className="social-contact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+                {followSocials.map((s) => (
+                  <a
+                    key={s.name}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-contact-item"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 16,
+                      padding: '16px 20px',
+                      background: '#12263A',
+                      borderRadius: 14,
+                      border: '1px solid rgba(198,167,94,0.08)',
+                      textDecoration: 'none',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <div style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: '50%',
+                      background: s.bgGradient || s.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      color: s.name === 'Lemon8' ? '#0B1C2D' : '#FFFFFF',
+                    }}>
+                      <svg viewBox="0 0 24 24" width={22} height={22} dangerouslySetInnerHTML={{ __html: s.svg }} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#FFFFFF' }}>{s.name}</div>
+                      <div style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>
+                        {s.href === '#' ? 'เร็วๆ นี้' : `@sunsearapidscare`}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* Business Hours */}
           <div style={{ maxWidth: 600, margin: '0 auto 60px' }}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 24 }}>
@@ -213,6 +325,19 @@ export default function ContactPage() {
 
       <Footer />
       <StickyBottomNav />
+
+      {/* Responsive styles for social grid */}
+      <style>{`
+        .social-contact-item:hover {
+          border-color: rgba(198,167,94,0.3) !important;
+          transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+          .social-contact-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </main>
   )
 }

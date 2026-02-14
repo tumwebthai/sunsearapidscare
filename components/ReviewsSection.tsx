@@ -11,7 +11,7 @@ export default function ReviewsSection() {
   ]
 
   return (
-    <section id="reviews" style={{ padding: '120px 24px', background: '#12263A', position: 'relative' }}>
+    <section id="reviews" style={{ padding: '120px 24px', background: '#12263A', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: 0, left: '10%', right: '10%', height: 1, background: 'linear-gradient(90deg, transparent, rgba(198,167,94,0.2), transparent)' }} />
 
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>

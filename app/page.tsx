@@ -33,7 +33,7 @@ import StickyBottomNav from '@/components/StickyBottomNav'
  */
 export default function Home() {
   return (
-    <main style={{ background: 'var(--navy-900)', minHeight: '100vh' }}>
+    <main style={{ background: 'var(--navy-900)', minHeight: '100vh', overflowX: 'hidden' }}>
       <Navbar />
       <Hero />
       <MarqueeBanner />

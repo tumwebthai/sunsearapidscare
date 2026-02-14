@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
+import TrackingScripts from '@/components/TrackingScripts'
+import ChatWidget from '@/components/ChatWidget'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -32,7 +35,13 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Suspense fallback={null}>
+          <TrackingScripts />
+        </Suspense>
+        {children}
+        <ChatWidget />
+      </body>
     </html>
   )
 }

@@ -3,6 +3,9 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import type { Vehicle, Route } from '@/lib/data'
+import { supabase } from '@/lib/supabase'
+import type { BookingInsert } from '@/lib/types'
+import LocationPicker from '@/components/LocationPicker'
 
 /* ── Types ── */
 interface BookingData {
@@ -135,6 +138,8 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
   const [data, setData] = useState<BookingData>(INITIAL)
   const [errors, setErrors] = useState<Partial<Record<keyof BookingData, string>>>({})
   const [refNumber, setRefNumber] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const update = <K extends keyof BookingData>(key: K, value: BookingData[K]) => {
     setData((prev) => ({ ...prev, [key]: value }))
@@ -240,19 +245,64 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
   }
 
   /* ── Submit ── */
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    setSubmitError('')
+
     const now = new Date()
     const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`
     const rand = String(Math.floor(1000 + Math.random() * 9000))
     const ref = `SSRC-${dateStr}-${rand}`
-    setRefNumber(ref)
+
+    const bookingData: BookingInsert = {
+      reference_number: ref,
+      service_type: data.serviceType,
+      pickup_location: data.serviceType === 'airport'
+        ? (data.direction === 'pickup' ? data.airport : (data.destination === 'อื่นๆ' ? data.customDestination : data.destination))
+        : data.pickupLocation,
+      dropoff_location: data.serviceType === 'airport'
+        ? (data.direction === 'pickup' ? (data.destination === 'อื่นๆ' ? data.customDestination : data.destination) : data.airport)
+        : data.dropoffLocation,
+      airport: data.serviceType === 'airport' ? data.airport : '',
+      direction: data.serviceType === 'airport' ? data.direction : '',
+      travel_date: data.date,
+      travel_time: data.time,
+      num_days: data.serviceType === 'airport' ? 1 : data.numDays,
+      passengers: data.passengers,
+      luggage: data.bags,
+      vehicle_slug: data.selectedVehicle,
+      vehicle_name: selectedVehicleObj ? `${selectedVehicleObj.name} (${selectedVehicleObj.type})` : '',
+      estimated_price: estimatedPrice ? Number(estimatedPrice.van.replace(/,/g, '')) : (selectedVehicleObj ? selectedVehicleObj.priceNum : 0),
+      customer_name: data.name,
+      customer_email: data.email,
+      customer_phone: data.phone,
+      country_code: data.countryCode,
+      preferred_contact: data.contactMethod,
+      line_id: data.lineId,
+      flight_number: data.flightNumber,
+      hotel_name: data.hotelName,
+      special_notes: data.notes,
+      status: 'pending',
+      payment_status: 'unpaid',
+    }
 
     console.log('=== BOOKING SUBMITTED ===')
     console.log('Reference:', ref)
-    console.log('Data:', JSON.stringify(data, null, 2))
+    console.log('Data:', JSON.stringify(bookingData, null, 2))
     console.log('========================')
 
-    setConfirmed(true)
+    try {
+      const { error } = await supabase.from('bookings').insert([bookingData])
+      if (error) throw error
+      fetch('/api/booking-notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(bookingData) })
+      setRefNumber(ref)
+      setConfirmed(true)
+    } catch (err) {
+      console.error('Booking insert error:', err)
+      setSubmitError('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const resetForm = () => {
@@ -261,6 +311,7 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
     setFormStep(1)
     setConfirmed(false)
     setRefNumber('')
+    setSubmitError('')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -619,13 +670,28 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
                     {(data.serviceType === 'daily' || data.serviceType === 'tour') && (
                       <>
                         <div>
-                          <label style={labelStyle}>สถานที่รับ *</label>
-                          <input type="text" value={data.pickupLocation} onChange={(e) => update('pickupLocation', e.target.value)} placeholder="เช่น โรงแรม, คอนโด, สำนักงาน" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                          <LocationPicker
+                            label="สถานที่รับ *"
+                            placeholder="พิมพ์ชื่อสถานที่ เช่น สนามบินสุวรรณภูมิ, โรงแรม..."
+                            value={data.pickupLocation}
+                            onChange={(val) => update('pickupLocation', val)}
+                            required
+                            inputStyle={inputStyle}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
+                          />
                           {errors.pickupLocation && <div style={errorStyle}>{errors.pickupLocation}</div>}
                         </div>
                         <div>
-                          <label style={labelStyle}>สถานที่ส่ง / จุดหมาย</label>
-                          <input type="text" value={data.dropoffLocation} onChange={(e) => update('dropoffLocation', e.target.value)} placeholder="เช่น พัทยา, หัวหิน, เชียงใหม่" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                          <LocationPicker
+                            label="สถานที่ส่ง / จุดหมาย"
+                            placeholder="พิมพ์จุดหมายปลายทาง เช่น พัทยา, หัวหิน..."
+                            value={data.dropoffLocation}
+                            onChange={(val) => update('dropoffLocation', val)}
+                            inputStyle={inputStyle}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
+                          />
                         </div>
                         <div>
                           <label style={labelStyle}>จำนวนวัน</label>
@@ -856,12 +922,35 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
                   </div>
                 )}
 
+                {/* ── Submit Error ── */}
+                {submitError && (
+                  <div style={{ marginTop: 24, padding: '16px 20px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 12 }}>
+                    <p style={{ fontSize: 14, color: '#EF4444', fontWeight: 600, marginBottom: 12 }}>{submitError}</p>
+                    <div style={{ display: 'flex', gap: 10 }}>
+                      <button
+                        type="button"
+                        onClick={() => setSubmitError('')}
+                        style={{ flex: 1, padding: '10px 16px', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 8, color: '#FFFFFF', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        ลองใหม่
+                      </button>
+                      <a
+                        href={lineUrl}
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '10px 16px', background: '#06C755', borderRadius: 8, textDecoration: 'none', color: '#FFFFFF', fontSize: 13, fontWeight: 600 }}
+                      >
+                        💬 จองผ่าน LINE
+                      </a>
+                    </div>
+                  </div>
+                )}
+
                 {/* ── Navigation Buttons ── */}
                 <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
                   {formStep > 1 && (
                     <button
                       type="button"
                       onClick={goBack}
+                      disabled={isSubmitting}
                       style={{
                         flex: 1,
                         padding: '16px',
@@ -871,8 +960,9 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
                         color: '#C6A75E',
                         fontSize: 15,
                         fontWeight: 600,
-                        cursor: 'pointer',
+                        cursor: isSubmitting ? 'not-allowed' : 'pointer',
                         transition: 'all 0.2s',
+                        opacity: isSubmitting ? 0.5 : 1,
                       }}
                     >
                       ← ย้อนกลับ
@@ -881,23 +971,23 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
                   <button
                     type="button"
                     onClick={goNext}
-                    disabled={!data.serviceType && formStep === 1}
+                    disabled={(!data.serviceType && formStep === 1) || isSubmitting}
                     style={{
                       flex: formStep > 1 ? 2 : 1,
                       padding: '16px',
-                      background: (!data.serviceType && formStep === 1) ? 'rgba(198,167,94,0.2)' : 'linear-gradient(135deg, #B9973E, #E5C97A)',
+                      background: ((!data.serviceType && formStep === 1) || isSubmitting) ? 'rgba(198,167,94,0.2)' : 'linear-gradient(135deg, #B9973E, #E5C97A)',
                       border: 'none',
                       borderRadius: 12,
-                      color: (!data.serviceType && formStep === 1) ? '#9CA3AF' : '#0B1C2D',
+                      color: ((!data.serviceType && formStep === 1) || isSubmitting) ? '#9CA3AF' : '#0B1C2D',
                       fontSize: 16,
                       fontWeight: 700,
-                      cursor: (!data.serviceType && formStep === 1) ? 'not-allowed' : 'pointer',
-                      opacity: (!data.serviceType && formStep === 1) ? 0.5 : 1,
+                      cursor: ((!data.serviceType && formStep === 1) || isSubmitting) ? 'not-allowed' : 'pointer',
+                      opacity: ((!data.serviceType && formStep === 1) || isSubmitting) ? 0.5 : 1,
                       transition: 'all 0.2s',
-                      boxShadow: (!data.serviceType && formStep === 1) ? 'none' : '0 4px 20px rgba(198,167,94,0.3)',
+                      boxShadow: ((!data.serviceType && formStep === 1) || isSubmitting) ? 'none' : '0 4px 20px rgba(198,167,94,0.3)',
                     }}
                   >
-                    {formStep === 3 ? '✓ ยืนยันการจอง' : 'ถัดไป →'}
+                    {isSubmitting ? '⏳ กำลังส่งข้อมูล...' : formStep === 3 ? '✓ ยืนยันการจอง' : 'ถัดไป →'}
                   </button>
                 </div>
               </div>

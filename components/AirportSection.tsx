@@ -13,7 +13,7 @@ export default function AirportSection() {
   ]
 
   return (
-    <section id="airport" style={{ padding: '120px 24px', background: '#12263A', position: 'relative' }}>
+    <section id="airport" style={{ padding: '120px 24px', background: '#12263A', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(198,167,94,0.03) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: 1000, margin: '0 auto', position: 'relative' }}>
