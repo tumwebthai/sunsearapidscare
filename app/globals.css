@@ -1,0 +1,299 @@
+/* ============================================
+   SunSeaRapidsCare — Global Styles
+   Corporate Chauffeur Service — Luxury Executive
+   ============================================ */
+
+:root {
+  /* Navy Backgrounds */
+  --navy-900: #0B1C2D;
+  --navy-800: #12263A;
+  --navy-700: #1A2F45;
+
+  /* Gold Accent — buttons, icons, underlines, highlights, badges, prices ONLY */
+  --gold-500: #C6A75E;
+  --gold-600: #B9973E;
+  --gold-gradient: linear-gradient(135deg, #B9973E, #E5C97A);
+
+  /* Text */
+  --white: #FFFFFF;
+  --white-soft: #F5F5F5;
+  --gray-400: #9CA3AF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 70px;
+}
+
+body {
+  font-family: 'Noto Sans Thai', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--navy-900);
+  color: var(--white-soft);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(198, 167, 94, 0.3);
+  color: var(--white);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Card (navy bg) ── */
+.card-navy {
+  background: var(--navy-800);
+  border: 1px solid rgba(198, 167, 94, 0.1);
+  border-radius: 18px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-navy:hover {
+  border-color: rgba(198, 167, 94, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transform: translateY(-8px);
+}
+
+/* ── Glass Card (overlay) ── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(198, 167, 94, 0.1);
+  border-radius: 18px;
+  transition: all 0.35s ease;
+}
+.glass-card:hover {
+  border-color: rgba(198, 167, 94, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ── FAQ Card ── */
+.faq-card {
+  background: var(--navy-800);
+  border: 1px solid rgba(198, 167, 94, 0.08);
+  border-radius: 14px;
+  transition: all 0.35s ease;
+}
+
+/* ── Gold Shimmer Text ── */
+.gold-shimmer {
+  background: linear-gradient(135deg, #B9973E, #E5C97A, #B9973E);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(198, 167, 94, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(198, 167, 94, 0.5); }
+}
+
+/* ── Fleet car image hover ── */
+.fleet-car-image:hover {
+  transform: scale(1.05);
+}
+
+/* ── Gallery image hover ── */
+.gallery-image:hover {
+  transform: scale(1.05);
+}
+
+/* ── Fleet Carousel (mobile) ── */
+.fleet-carousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 8px;
+}
+.fleet-carousel::-webkit-scrollbar { display: none; }
+.fleet-carousel > div {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* ── Mobile menu overlay ── */
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0B1C2D;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  animation: fadeIn 0.25s ease;
+}
+
+/* ── Booking form select/input dark theme ── */
+.booking-checkbox {
+  cursor: pointer;
+}
+select option {
+  background: #1A2F45;
+  color: #FFFFFF;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(0.5) saturate(3) hue-rotate(15deg);
+}
+
+/* ── Compare grid (vehicle detail page) ── */
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ══════════════════════════════════════
+   Responsive — Mobile (≤768px)
+   ══════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Layout */
+  .fleet-grid { display: none !important; }
+  .fleet-mobile { display: block !important; }
+  .route-grid { grid-template-columns: 1fr !important; }
+  .desktop-nav { display: none !important; }
+  .mobile-hamburger { display: flex !important; }
+  .bottom-nav { display: flex !important; }
+  .gallery-grid { grid-template-columns: 1fr !important; }
+  .footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .footer-col-center {
+    border-left: none !important;
+    border-right: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-top: 1px solid rgba(198,167,94,0.15) !important;
+    padding-top: 32px !important;
+  }
+  .floating-line { display: none !important; }
+
+  /* Body padding for bottom nav */
+  body { padding-bottom: 60px; }
+
+  /* ── Hero mobile compact ── */
+  .hero-section {
+    min-height: auto !important;
+  }
+  .hero-content {
+    padding-top: 80px !important;
+    padding-bottom: 40px !important;
+  }
+  .hero-badge { margin-bottom: 12px !important; }
+  .hero-title { font-size: 28px !important; margin-bottom: 12px !important; }
+  .hero-sub { font-size: 14px !important; margin-bottom: 20px !important; }
+  .cta-buttons { flex-direction: column !important; margin-bottom: 24px !important; }
+  .cta-buttons a { padding: 14px 28px !important; font-size: 15px !important; }
+  .hero-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    max-width: 100% !important;
+  }
+  .hero-stats .stat-num { font-size: 20px !important; }
+  .hero-scroll { display: none !important; }
+
+  /* ── Standards mobile — icon above title, no desc ── */
+  .standards-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+  .standard-card {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px 12px !important;
+    gap: 8px !important;
+  }
+  .standard-icon {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 28px !important;
+    border-radius: 12px !important;
+  }
+  .standard-title {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin-bottom: 0 !important;
+  }
+  .standard-desc { display: none !important; }
+
+  /* ── Booking mobile ── */
+  .quick-booking-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .service-type-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .booking-grid-2col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Compare section mobile ── */
+  .compare-grid { display: none !important; }
+  .compare-mobile { display: block !important; }
+
+  /* ── Vehicle detail page ── */
+  .vehicle-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* ── About stats ── */
+  .about-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .fleet-mobile { display: none !important; }
+  .compare-mobile { display: none !important; }
+  .bottom-nav { display: none !important; }
+}
+
+@media (max-width: 480px) {
+  .standards-grid { grid-template-columns: 1fr 1fr !important; }
+}

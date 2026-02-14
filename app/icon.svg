@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628"/>
+      <stop offset="100%" style="stop-color:#060e1a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0ca7e"/>
+      <stop offset="50%" style="stop-color:#c9a84c"/>
+      <stop offset="100%" style="stop-color:#b8943f"/>
+    </linearGradient>
+    <linearGradient id="ray" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c9a84c;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#e0ca7e;stop-opacity:0.4"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+  <!-- Outer ring -->
+  <circle cx="256" cy="256" r="230" fill="none" stroke="url(#gold)" stroke-width="3" opacity="0.3"/>
+  <!-- Sun rays -->
+  <g transform="translate(256,240)">
+    <!-- 12 rays around the sun -->
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(30)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(60)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(90)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(120)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(150)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(180)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(210)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(240)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(270)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(300)"/>
+    <line x1="0" y1="-95" x2="0" y2="-130" stroke="url(#ray)" stroke-width="8" stroke-linecap="round" transform="rotate(330)"/>
+    <!-- Sun circle -->
+    <circle cx="0" cy="0" r="65" fill="url(#gold)"/>
+    <!-- Inner sun highlight -->
+    <circle cx="-12" cy="-12" r="40" fill="#e0ca7e" opacity="0.3"/>
+  </g>
+  <!-- Wave / Sea element -->
+  <path d="M80,320 Q140,295 200,320 Q260,345 320,320 Q380,295 440,320" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+  <path d="M100,345 Q160,320 220,345 Q280,370 340,345 Q400,320 420,345" fill="none" stroke="url(#gold)" stroke-width="4" stroke-linecap="round" opacity="0.3"/>
+  <!-- Text "SSR" -->
+  <text x="256" y="420" text-anchor="middle" font-family="Georgia, serif" font-size="62" font-weight="700" fill="url(#gold)" letter-spacing="12">SSR</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+  <defs>
+    <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0ca7e"/>
+      <stop offset="50%" style="stop-color:#c9a84c"/>
+      <stop offset="100%" style="stop-color:#b8943f"/>
+    </linearGradient>
+    <linearGradient id="logoRay" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c9a84c;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#e0ca7e;stop-opacity:0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sun icon -->
+  <g transform="translate(50,52)">
+    <!-- Rays -->
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round"/>
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round" transform="rotate(45)"/>
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round" transform="rotate(90)"/>
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round" transform="rotate(135)"/>
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round" transform="rotate(180)"/>
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round" transform="rotate(225)"/>
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round" transform="rotate(270)"/>
+    <line x1="0" y1="-32" x2="0" y2="-42" stroke="url(#logoRay)" stroke-width="3" stroke-linecap="round" transform="rotate(315)"/>
+    <!-- Sun body -->
+    <circle cx="0" cy="0" r="22" fill="url(#logoGold)"/>
+    <circle cx="-5" cy="-5" r="13" fill="#e0ca7e" opacity="0.3"/>
+    <!-- Wave below sun -->
+    <path d="M-30,18 Q-15,10 0,18 Q15,26 30,18" fill="none" stroke="url(#logoGold)" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+    <path d="M-24,25 Q-12,18 0,25 Q12,32 24,25" fill="none" stroke="url(#logoGold)" stroke-width="1.8" stroke-linecap="round" opacity="0.4"/>
+  </g>
+
+  <!-- Brand text -->
+  <text x="90" y="48" font-family="Georgia, 'Playfair Display', serif" font-size="28" font-weight="700" fill="url(#logoGold)" letter-spacing="1">
+    SunSeaRapidsCare
+  </text>
+
+  <!-- Tagline -->
+  <text x="90" y="72" font-family="'Segoe UI', sans-serif" font-size="11" fill="#c9a84c" opacity="0.6" letter-spacing="3" text-transform="uppercase">
+    PREMIUM CHAUFFEUR SERVICE
+  </text>
+
+  <!-- Decorative line under tagline -->
+  <line x1="90" y1="82" x2="200" y2="82" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+</svg>
