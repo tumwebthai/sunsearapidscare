@@ -7,12 +7,12 @@ import StickyBottomNav from '@/components/StickyBottomNav'
 import FleetClient from './FleetClient'
 
 export const metadata: Metadata = {
-  title: `รถของเรา | ${SITE_NAME} — เลือกรถ VIP ที่เหมาะกับคุณ`,
-  description: 'เลือกรถตู้ VIP พร้อมคนขับ Toyota Commuter, Hyundai H1, Alphard, Majesty, Staria ราคาเริ่ม 1,800 บาท/วัน รวมน้ำมัน ทางด่วน คนขับ',
-  keywords: 'เช่ารถตู้ VIP, Toyota Commuter, Hyundai H1, Alphard, Majesty, Staria, รถตู้พร้อมคนขับ',
+  title: `รถของเรา | ${SITE_NAME} — เลือกรถ VIP และรถเก๋งที่เหมาะกับคุณ`,
+  description: 'เลือกรถตู้ VIP และรถเก๋ง Sedan พร้อมคนขับ Toyota Commuter, Hyundai H1, Alphard, Majesty, Staria, Honda Accord, Toyota Camry ราคาเริ่ม 1,200 บาท รวมน้ำมัน ทางด่วน คนขับ',
+  keywords: 'เช่ารถตู้ VIP, เช่ารถเก๋งพร้อมคนขับ, Toyota Commuter, Hyundai H1, Alphard, Majesty, Staria, Honda Accord, Toyota Camry, รถตู้พร้อมคนขับ, รถเก๋งรับส่งสนามบิน',
   openGraph: {
     title: `รถของเรา | ${SITE_NAME}`,
-    description: 'เลือกรถตู้ VIP พร้อมคนขับ 6 รุ่น ราคาเริ่ม 1,800 บาท/วัน',
+    description: 'เลือกรถตู้ VIP และรถเก๋ง Sedan พร้อมคนขับ 8 รุ่น ราคาเริ่ม 1,200 บาท',
     url: `${SITE_URL}/fleet`,
     type: 'website',
     locale: 'th_TH',

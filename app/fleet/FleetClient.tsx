@@ -12,6 +12,7 @@ const FILTERS = [
   { label: 'Executive', value: 'Executive' },
   { label: 'Premium', value: 'Premium' },
   { label: 'Luxury', value: 'Luxury' },
+  { label: 'Sedan (รถเก๋ง)', value: 'Sedan' },
 ]
 
 export default function FleetClient({ fleet, lineUrl }: { fleet: Vehicle[]; lineUrl: string }) {

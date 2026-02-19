@@ -167,19 +167,25 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
     if (p > 13) return []
 
     const sorted = [...fleet]
-    if (p <= 4) {
+    if (p <= 3) {
+      // 1–3 passengers: sedans first, then small vans
       sorted.sort((a, b) => {
-        const order = ['toyota-alphard-executive', 'hyundai-h1-vip', 'hyundai-staria-luxury', 'toyota-majesty-premium', 'toyota-commuter-vip', 'toyota-commuter-standard']
+        const order = ['honda-accord', 'toyota-camry', 'toyota-alphard-executive', 'hyundai-h1-vip', 'hyundai-staria-luxury', 'toyota-majesty-premium', 'toyota-commuter-vip', 'toyota-commuter-standard']
+        return order.indexOf(a.slug) - order.indexOf(b.slug)
+      })
+    } else if (p <= 4) {
+      sorted.sort((a, b) => {
+        const order = ['toyota-alphard-executive', 'toyota-camry', 'honda-accord', 'hyundai-h1-vip', 'hyundai-staria-luxury', 'toyota-majesty-premium', 'toyota-commuter-vip', 'toyota-commuter-standard']
         return order.indexOf(a.slug) - order.indexOf(b.slug)
       })
     } else if (p <= 9) {
       sorted.sort((a, b) => {
-        const order = ['toyota-commuter-vip', 'toyota-majesty-premium', 'hyundai-staria-luxury', 'hyundai-h1-vip', 'toyota-alphard-executive', 'toyota-commuter-standard']
+        const order = ['toyota-commuter-vip', 'toyota-majesty-premium', 'hyundai-staria-luxury', 'hyundai-h1-vip', 'toyota-alphard-executive', 'toyota-commuter-standard', 'honda-accord', 'toyota-camry']
         return order.indexOf(a.slug) - order.indexOf(b.slug)
       })
     } else {
       sorted.sort((a, b) => {
-        const order = ['toyota-commuter-standard', 'toyota-commuter-vip', 'toyota-majesty-premium', 'hyundai-staria-luxury', 'hyundai-h1-vip', 'toyota-alphard-executive']
+        const order = ['toyota-commuter-standard', 'toyota-commuter-vip', 'toyota-majesty-premium', 'hyundai-staria-luxury', 'hyundai-h1-vip', 'toyota-alphard-executive', 'honda-accord', 'toyota-camry']
         return order.indexOf(a.slug) - order.indexOf(b.slug)
       })
     }
@@ -189,6 +195,7 @@ export default function BookingForm({ fleet, routes, lineUrl, phone, phoneRaw, w
   const topRecommendation = useMemo(() => {
     if (data.passengers > 13) return null
     const p = data.passengers
+    if (p <= 3) return fleet.find((v) => v.slug === 'honda-accord') || fleet[0]
     if (p <= 4) return fleet.find((v) => v.slug === 'toyota-alphard-executive') || fleet[0]
     if (p <= 5) return fleet.find((v) => v.slug === 'hyundai-h1-vip') || fleet[0]
     if (p <= 7) return fleet.find((v) => v.slug === 'toyota-commuter-vip') || fleet[0]

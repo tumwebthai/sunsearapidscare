@@ -6,7 +6,7 @@
 export interface Vehicle {
   slug: string
   name: string
-  type: 'VIP' | 'Standard' | 'Executive' | 'Premium' | 'Luxury'
+  type: 'VIP' | 'Standard' | 'Executive' | 'Premium' | 'Luxury' | 'Sedan'
   badge: string
   badgeColor: string
   image: string
@@ -19,6 +19,14 @@ export interface Vehicle {
   whyChoose: { title: string; desc: string }[]
   useCases: string[]
   faq: { q: string; a: string }[]
+  /* Optional fields for extended detail pages */
+  metaTitle?: string
+  metaDescription?: string
+  h1?: string
+  bodyText?: string
+  airportPrices?: { route: string; price: string }[]
+  dailyHire?: string
+  brand?: string
 }
 
 export const FLEET: Vehicle[] = [
@@ -174,6 +182,90 @@ export const FLEET: Vehicle[] = [
       { q: 'เหมาะถ่ายรูปไหม?', a: 'เหมาะมากครับ ดีไซน์สวย หลังคาแก้ว ถ่ายรูปออกมาดีทั้งภายนอกและภายใน' },
     ],
   },
+  /* ── Sedan ── */
+  {
+    slug: 'honda-accord',
+    name: 'Honda Accord',
+    type: 'Sedan',
+    badge: 'Sedan',
+    badgeColor: '#10B981',
+    image: '/images/fleet/honda-accord-sedan.webp',
+    description: 'รถเก๋งหรูพร้อมคนขับมืออาชีพ เหมาะสำหรับลูกค้า 1–3 คน รับส่งสนามบิน ประชุม และเดินทางธุรกิจ',
+    seats: 3,
+    bags: 3,
+    price: '1,800', // TODO: ราคา placeholder — เจ้าของยืนยันราคาจริง
+    priceNum: 1800,
+    amenities: ['WiFi', 'น้ำดื่ม', 'ที่ชาร์จ USB-A/USB-C', 'GPS', 'ประกันภัยทุกที่นั่ง', 'ป้ายเหลืองถูกกฎหมาย'],
+    whyChoose: [
+      { title: 'คุ้มค่าสำหรับ 1–3 คน', desc: 'ราคาเริ่มต้นเพียง 1,800 บาท/วัน เหมาะสำหรับเดินทางกลุ่มเล็ก' },
+      { title: 'รับส่งสนามบินสะดวก', desc: 'คนขับถือป้ายชื่อรอรับ ทั้งสุวรรณภูมิและดอนเมือง ราคาเหมาจ่าย' },
+      { title: 'คนขับ Service Mind', desc: 'ผ่านการอบรม แต่งกายสุภาพ ตรงเวลาทุกครั้ง ให้บริการระดับมืออาชีพ' },
+    ],
+    useCases: ['รับส่งสนามบิน (1–3 คน)', 'ประชุมธุรกิจ', 'เดินทางส่วนตัว', 'รับส่งผู้บริหาร', 'เดินทางระหว่างเมือง'],
+    faq: [
+      { q: 'Honda Accord รับได้กี่คน?', a: 'สูงสุด 3 คน กระเป๋าใหญ่ 3 ใบ' },
+      { q: 'ราคารวมอะไรบ้าง?', a: 'รวมค่าน้ำมัน คนขับ ค่าทางด่วน น้ำดื่ม WiFi และประกันภัย' },
+      { q: 'Honda Accord ใช้รับส่งสนามบินได้ไหม?', a: 'ได้ทั้งสุวรรณภูมิและดอนเมือง คนขับถือป้ายชื่อรอรับ' },
+    ],
+    /* Extended detail page content */
+    metaTitle: 'Honda Accord พร้อมคนขับ | SunSeaRapidsCare',
+    metaDescription: 'เช่า Honda Accord พร้อมคนขับมืออาชีพ รับส่งสนามบินสุวรรณภูมิ ดอนเมือง ราคาเหมาจ่าย เริ่มต้น ฿1,200 จองง่าย ตรงเวลา',
+    h1: 'Honda Accord พร้อมคนขับ — บริการรถเก๋งรับส่งสนามบิน',
+    bodyText: 'Honda Accord พร้อมคนขับมืออาชีพ — ตัวเลือกที่ดีที่สุดสำหรับการเดินทาง 1–3 คน รถเก๋งซีดานสมรรถนะสูง ห้องโดยสารกว้างขวาง เงียบสนิท เหมาะสำหรับรับส่งสนามบิน ประชุมธุรกิจ และการเดินทางส่วนตัว คนขับผ่านการอบรม Service Mind แต่งกายสุภาพ และตรงเวลาทุกครั้ง',
+    airportPrices: [
+      // TODO: ราคา placeholder — เจ้าของยืนยันราคาจริง
+      { route: 'สุวรรณภูมิ → กรุงเทพ ในเมือง', price: '1,200' },
+      { route: 'สุวรรณภูมิ → พัทยา', price: '2,000' },
+      { route: 'สุวรรณภูมิ → หัวหิน', price: '3,000' },
+      { route: 'สุวรรณภูมิ → เขาใหญ่', price: '3,200' },
+      { route: 'ดอนเมือง → กรุงเทพ ในเมือง', price: '1,000' },
+      { route: 'ดอนเมือง → พัทยา', price: '2,500' },
+    ],
+    dailyHire: 'เริ่มต้น ฿1,800/วัน (8 ชม.)', // TODO: ราคา placeholder
+    brand: 'Honda',
+  },
+  {
+    slug: 'toyota-camry',
+    name: 'Toyota Camry',
+    type: 'Sedan',
+    badge: 'Executive',
+    badgeColor: '#7C3AED',
+    image: '/images/fleet/toyota-camry-sedan.webp',
+    description: 'ซีดานระดับ Executive หรูหราและเงียบสนิท เหมาะสำหรับผู้บริหาร นักธุรกิจ และแขก VIP 1–3 คน',
+    seats: 3,
+    bags: 3,
+    price: '2,000', // TODO: ราคา placeholder — เจ้าของยืนยันราคาจริง
+    priceNum: 2000,
+    amenities: ['WiFi', 'น้ำดื่ม', 'ที่ชาร์จ USB-A/USB-C/Wireless', 'เบาะหนังแท้', 'แอร์ Dual-zone', 'GPS', 'ประกันภัยทุกที่นั่ง', 'ป้ายเหลืองถูกกฎหมาย'],
+    whyChoose: [
+      { title: 'Executive Sedan อันดับ 1', desc: 'Toyota Camry ได้รับความไว้วางใจจากนักธุรกิจและผู้บริหารทั่วโลก' },
+      { title: 'เงียบสนิท ทำงานระหว่างทาง', desc: 'ห้องโดยสารเก็บเสียงดีเยี่ยม แอร์ Dual-zone เบาะหนังแท้' },
+      { title: 'Wireless Charging', desc: 'ชาร์จมือถือไร้สาย USB-A/USB-C พร้อมใช้งานตลอดการเดินทาง' },
+      { title: 'คนขับระดับ Executive', desc: 'ผ่านการอบรม Service Mind แต่งกายสุภาพ พร้อมให้บริการ 24/7' },
+    ],
+    useCases: ['รับส่งผู้บริหาร', 'รับแขก VIP', 'รับส่งสนามบิน (1–3 คน)', 'ประชุมธุรกิจ', 'เดินทางส่วนตัวระดับพรีเมียม'],
+    faq: [
+      { q: 'Toyota Camry ต่างจาก Honda Accord อย่างไร?', a: 'Camry เป็น Executive Sedan มาพร้อมเบาะหนังแท้ แอร์ Dual-zone และ Wireless Charging เหมาะสำหรับผู้บริหารและแขก VIP' },
+      { q: 'Toyota Camry จองรับส่งสนามบินได้ไหม?', a: 'ได้ทั้งสุวรรณภูมิและดอนเมือง' },
+      { q: 'ถ้าเที่ยวบินดีเลย์ จะคิดค่าใช้จ่ายเพิ่มไหม?', a: 'ไม่มีค่าใช้จ่ายเพิ่มสำหรับ Flight Delay ไม่เกิน 1 ชั่วโมง' },
+    ],
+    /* Extended detail page content */
+    metaTitle: 'Toyota Camry พร้อมคนขับ | SunSeaRapidsCare',
+    metaDescription: 'เช่า Toyota Camry Executive พร้อมคนขับ รับส่งสนามบิน ผู้บริหาร แขก VIP ราคาเหมาจ่าย เริ่มต้น ฿1,200 บริการ 24/7',
+    h1: 'Toyota Camry Executive พร้อมคนขับ — รถเก๋งระดับผู้บริหาร',
+    bodyText: 'Toyota Camry Executive พร้อมคนขับ — มาตรฐานระดับผู้บริหารสำหรับการเดินทาง 1–3 คน ซีดาน flagship ของ Toyota ที่ได้รับความไว้วางใจจากนักธุรกิจและผู้บริหารทั่วโลก ด้วยห้องโดยสารเงียบสนิท เบาะหนังแท้ และระบบแอร์ Dual-zone คุณสามารถทำงานหรือพักผ่อนได้อย่างสบายระหว่างเดินทาง',
+    airportPrices: [
+      // TODO: ราคา placeholder — เจ้าของยืนยันราคาจริง (same as Honda Accord — owner to confirm)
+      { route: 'สุวรรณภูมิ → กรุงเทพ ในเมือง', price: '1,200' },
+      { route: 'สุวรรณภูมิ → พัทยา', price: '2,000' },
+      { route: 'สุวรรณภูมิ → หัวหิน', price: '3,000' },
+      { route: 'สุวรรณภูมิ → เขาใหญ่', price: '3,200' },
+      { route: 'ดอนเมือง → กรุงเทพ ในเมือง', price: '1,000' },
+      { route: 'ดอนเมือง → พัทยา', price: '2,500' },
+    ],
+    dailyHire: 'เริ่มต้น ฿2,000/วัน (8 ชม.)', // TODO: ราคา placeholder
+    brand: 'Toyota',
+  },
 ]
 
 export interface Route {
@@ -191,6 +283,12 @@ export const ROUTES: Route[] = [
   { from: 'สุวรรณภูมิ (BKK)', to: 'เขาใหญ่', time: '~3 ชม.', sedan: '3,200', van: '4,200' },
   { from: 'ดอนเมือง (DMK)', to: 'กรุงเทพ ในเมือง', time: '~40 นาที', sedan: '1,000', van: '1,500' },
   { from: 'ดอนเมือง (DMK)', to: 'พัทยา', time: '~2.5 ชม.', sedan: '2,500', van: '3,200' },
+  // TODO: ราคา placeholder — เจ้าของยืนยันราคาจริง
+  { from: 'สุวรรณภูมิ (BKK)', to: 'ระยอง', time: '~2.5 ชม.', sedan: '2,500', van: '3,500' },
+  { from: 'สุวรรณภูมิ (BKK)', to: 'จันทบุรี', time: '~4 ชม.', sedan: '4,000', van: '5,500' },
+  { from: 'สุวรรณภูมิ (BKK)', to: 'ชะอำ', time: '~2.5 ชม.', sedan: '2,800', van: '3,800' },
+  { from: 'สุวรรณภูมิ (BKK)', to: 'อยุธยา', time: '~1.5 ชม.', sedan: '1,800', van: '2,500' },
+  { from: 'สุวรรณภูมิ (BKK)', to: 'เชียงใหม่', time: '~8 ชม.', sedan: '8,000', van: '10,000' },
 ]
 
 export interface FaqItem {

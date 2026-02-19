@@ -19,11 +19,11 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   if (!v) return {}
 
   return {
-    title: `${v.name} ${v.type} — เช่าพร้อมคนขับ ฿${v.price}/วัน | ${SITE_NAME}`,
-    description: `${v.description} ${v.seats} ที่นั่ง สิ่งอำนวยความสะดวกครบ ราคา ${v.price} บาท/วัน รวมน้ำมัน ทางด่วน คนขับมืออาชีพ`,
-    keywords: `${v.name}, ${v.type}, เช่า${v.name}, รถตู้${v.type}พร้อมคนขับ, ${v.slug}`,
+    title: v.metaTitle || `${v.name} ${v.type} — เช่าพร้อมคนขับ ฿${v.price}/วัน | ${SITE_NAME}`,
+    description: v.metaDescription || `${v.description} ${v.seats} ที่นั่ง สิ่งอำนวยความสะดวกครบ ราคา ${v.price} บาท/วัน รวมน้ำมัน ทางด่วน คนขับมืออาชีพ`,
+    keywords: `${v.name}, ${v.type}, เช่า${v.name}, ${v.name}พร้อมคนขับ, ${v.slug}`,
     openGraph: {
-      title: `${v.name} ${v.type} | ${SITE_NAME}`,
+      title: v.metaTitle || `${v.name} ${v.type} | ${SITE_NAME}`,
       description: `${v.description} ราคา ${v.price} บาท/วัน`,
       url: `${SITE_URL}/fleet/${v.slug}`,
       type: 'website',
@@ -49,10 +49,11 @@ export default function VehiclePage({ params }: { params: { slug: string } }) {
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: `${v.name} ${v.type} — เช่าพร้อมคนขับ`,
-    description: v.description,
+    name: v.h1 || `${v.name} ${v.type} — เช่าพร้อมคนขับ`,
+    description: v.bodyText || v.description,
     image: `${SITE_URL}${v.image}`,
-    brand: { '@type': 'Brand', name: SITE_NAME },
+    brand: { '@type': 'Brand', name: v.brand || SITE_NAME },
+    url: `${SITE_URL}/fleet/${v.slug}`,
     offers: {
       '@type': 'Offer',
       priceCurrency: 'THB',
@@ -102,9 +103,9 @@ export default function VehiclePage({ params }: { params: { slug: string } }) {
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <span style={{ color: '#C6A75E', fontSize: 13, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8 }}>{v.type}</span>
               <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, color: '#FFFFFF', margin: '0 0 16px' }}>
-                {v.name}
+                {v.h1 || v.name}
               </h1>
-              <p style={{ fontSize: 16, color: '#9CA3AF', lineHeight: 1.7, marginBottom: 24 }}>{v.description}</p>
+              <p style={{ fontSize: 16, color: '#9CA3AF', lineHeight: 1.7, marginBottom: 24 }}>{v.bodyText || v.description}</p>
 
               <div style={{ display: 'flex', gap: 24, marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -188,6 +189,41 @@ export default function VehiclePage({ params }: { params: { slug: string } }) {
               ))}
             </div>
           </section>
+
+          {/* Airport Transfer Pricing Table (sedan/custom vehicles) */}
+          {v.airportPrices && v.airportPrices.length > 0 && (
+            <section style={{ marginBottom: 60 }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, color: '#FFFFFF', marginBottom: 24 }}>
+                ราคารับส่งสนามบิน — {v.name}
+              </h2>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 400 }}>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'left', padding: '14px 20px', background: '#12263A', color: '#C6A75E', fontSize: 14, fontWeight: 700, borderBottom: '2px solid rgba(198,167,94,0.2)', borderRadius: '12px 0 0 0' }}>เส้นทาง</th>
+                      <th style={{ textAlign: 'right', padding: '14px 20px', background: '#12263A', color: '#C6A75E', fontSize: 14, fontWeight: 700, borderBottom: '2px solid rgba(198,167,94,0.2)', borderRadius: '0 12px 0 0' }}>ราคา</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* TODO: ราคา placeholder — เจ้าของยืนยันราคาจริง */}
+                    {v.airportPrices.map((r, i) => (
+                      <tr key={i}>
+                        <td style={{ padding: '14px 20px', fontSize: 14, color: '#F5F5F5', borderBottom: '1px solid rgba(198,167,94,0.08)' }}>{r.route}</td>
+                        <td style={{ padding: '14px 20px', fontSize: 16, fontWeight: 700, color: '#C6A75E', textAlign: 'right', borderBottom: '1px solid rgba(198,167,94,0.08)' }}>฿{r.price}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {v.dailyHire && (
+                <div style={{ marginTop: 20, padding: '16px 20px', background: 'rgba(198,167,94,0.08)', border: '1px solid rgba(198,167,94,0.15)', borderRadius: 12 }}>
+                  <span style={{ fontSize: 14, color: '#9CA3AF' }}>เหมารายวัน: </span>
+                  {/* TODO: ราคา placeholder — เจ้าของยืนยันราคาจริง */}
+                  <span style={{ fontSize: 16, fontWeight: 700, color: '#C6A75E' }}>{v.dailyHire}</span>
+                </div>
+              )}
+            </section>
+          )}
 
           {/* Why Choose */}
           <section style={{ marginBottom: 60 }}>

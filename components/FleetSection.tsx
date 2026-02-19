@@ -13,6 +13,8 @@ export default function FleetSection() {
     { slug: 'toyota-alphard-executive', image: '/images/fleet/toyota-alphard-executive.webp', badge: 'Executive', type: 'Executive', name: 'Toyota Alphard', desc: 'ระดับ Executive สำหรับผู้บริหารและแขก VIP ความเป็นส่วนตัวสูงสุด', seats: 4, bags: 3, price: '4,500', badgeColor: '#7C3AED' },
     { slug: 'toyota-majesty-premium', image: '/images/fleet/toyota-majesty-premium.webp', badge: 'Premium', type: 'Premium', name: 'Toyota Majesty', desc: 'พรีเมียมแวน นั่งสบาย ดีไซน์หรู ทริปครอบครัวและกลุ่มเล็ก', seats: 7, bags: 5, price: '3,500', badgeColor: '#C6A75E' },
     { slug: 'hyundai-staria-luxury', image: '/images/fleet/hyundai-staria-luxury.webp', badge: 'Luxury', type: 'Luxury', name: 'Hyundai Staria', desc: 'แวนหรูดีไซน์แห่งอนาคต นั่งสบายระดับ First Class', seats: 7, bags: 5, price: '3,500', badgeColor: '#DC2626' },
+    { slug: 'honda-accord', image: '/images/fleet/honda-accord-sedan.webp', badge: 'Sedan', type: 'Sedan', name: 'Honda Accord', desc: 'รถเก๋งหรูพร้อมคนขับมืออาชีพ เหมาะสำหรับลูกค้า 1–3 คน รับส่งสนามบิน ประชุม และเดินทางธุรกิจ', seats: 3, bags: 3, price: '1,800', badgeColor: '#10B981' },
+    { slug: 'toyota-camry', image: '/images/fleet/toyota-camry-sedan.webp', badge: 'Executive', type: 'Sedan', name: 'Toyota Camry', desc: 'ซีดานระดับ Executive หรูหราและเงียบสนิท เหมาะสำหรับผู้บริหาร นักธุรกิจ และแขก VIP 1–3 คน', seats: 3, bags: 3, price: '2,000', badgeColor: '#7C3AED' },
   ]
 
   const scrollRef = useRef<HTMLDivElement>(null)
