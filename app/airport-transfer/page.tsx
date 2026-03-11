@@ -7,11 +7,11 @@ import StickyBottomNav from '@/components/StickyBottomNav'
 
 export const metadata: Metadata = {
   title: `รับส่งสนามบิน สุวรรณภูมิ ดอนเมือง Sedan & VAN VIP | ${SITE_NAME}`,
-  description: 'บริการรับส่งสนามบิน สุวรรณภูมิ ดอนเมือง ราคาเหมาจ่าย Sedan เริ่ม ฿1,000 VAN VIP เริ่ม ฿1,500 ตรงเวลา ป้ายชื่อรอรับ ครอบคลุม 11 เส้นทาง พัทยา หัวหิน เขาใหญ่ ระยอง จันทบุรี ชะอำ อยุธยา เชียงใหม่',
+  description: 'บริการรับส่งสนามบิน สุวรรณภูมิ ดอนเมือง ราคาเหมาจ่าย Sedan เริ่ม ฿1,300 Commuter VIP เริ่ม ฿1,200 Deluxe Van เริ่ม ฿2,300 ตรงเวลา ป้ายชื่อรอรับ ครอบคลุม 11 เส้นทาง พัทยา หัวหิน เขาใหญ่ ระยอง จันทบุรี ชะอำ อยุธยา เชียงใหม่',
   keywords: 'รับส่งสนามบิน, airport transfer, สุวรรณภูมิ, ดอนเมือง, รถรับส่งสนามบิน, transfer bangkok airport, รถเก๋งรับส่งสนามบิน, sedan airport transfer, VAN VIP สนามบิน, รับส่งสนามบินพัทยา, รับส่งสนามบินหัวหิน',
   openGraph: {
     title: `รับส่งสนามบิน Sedan & VAN VIP | ${SITE_NAME}`,
-    description: 'บริการรับส่งสนามบิน สุวรรณภูมิ ดอนเมือง Sedan เริ่ม ฿1,000 VAN VIP เริ่ม ฿1,500 ครอบคลุม 11 เส้นทาง ตรงเวลา ปลอดภัย',
+    description: 'บริการรับส่งสนามบิน สุวรรณภูมิ ดอนเมือง Sedan เริ่ม ฿1,300 Commuter VIP เริ่ม ฿1,200 Deluxe Van เริ่ม ฿2,300 ครอบคลุม 11 เส้นทาง ตรงเวลา ปลอดภัย',
     url: `${SITE_URL}/airport-transfer`,
     type: 'website',
     locale: 'th_TH',
@@ -90,8 +90,8 @@ export default function AirportTransferPage() {
             <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, minWidth: 700 }}>
               <thead>
                 <tr>
-                  {['เส้นทาง', '', 'ปลายทาง', 'ระยะเวลา', 'Sedan', 'VAN VIP'].map((h, i) => (
-                    <th key={i} style={{ padding: '16px 20px', background: '#12263A', color: '#C6A75E', fontSize: 13, fontWeight: 700, textAlign: 'left', borderBottom: '2px solid rgba(198,167,94,0.2)', ...(i === 0 ? { borderRadius: '12px 0 0 0' } : i === 5 ? { borderRadius: '0 12px 0 0' } : {}) }}>
+                  {['เส้นทาง', '', 'ปลายทาง', 'ระยะเวลา', 'Sedan', 'Commuter VIP', 'Deluxe Van'].map((h, i) => (
+                    <th key={i} style={{ padding: '16px 20px', background: '#12263A', color: '#C6A75E', fontSize: 13, fontWeight: 700, textAlign: 'left', borderBottom: '2px solid rgba(198,167,94,0.2)', ...(i === 0 ? { borderRadius: '12px 0 0 0' } : i === 6 ? { borderRadius: '0 12px 0 0' } : {}) }}>
                       {h}
                     </th>
                   ))}
@@ -108,14 +108,20 @@ export default function AirportTransferPage() {
                       <span style={{ color: '#FFFFFF', fontWeight: 600 }}>฿{r.sedan}</span>
                     </td>
                     <td style={{ padding: '14px 20px', fontSize: 14 }}>
+                      <span style={{ color: '#10B981', fontWeight: 600 }}>{r.commuter ? `฿${r.commuter}` : '-'}</span>
+                    </td>
+                    <td style={{ padding: '14px 20px', fontSize: 14 }}>
                       <span style={{ color: '#C6A75E', fontWeight: 700 }}>฿{r.van}</span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <p style={{ fontSize: 12, color: '#9CA3AF', marginTop: 12, textAlign: 'center' }}>
-              * ราคารวมค่าน้ำมัน ทางด่วน ค่าจอดรถ น้ำดื่ม ไม่มีค่าใช้จ่ายเพิ่มเติม | เส้นทางอื่นสอบถามได้
+            <p style={{ fontSize: 13, color: '#9CA3AF', marginTop: 12, textAlign: 'center', lineHeight: 1.7 }}>
+              ราคารวมค่าน้ำมัน ค่าทางด่วน และค่าจอดรถแล้ว | ไม่มีค่าใช้จ่ายเพิ่มเติม
+            </p>
+            <p style={{ fontSize: 12, color: '#6B7280', marginTop: 4, textAlign: 'center' }}>
+              Sedan = Honda Accord / Toyota Camry | Commuter VIP = 8/9 ที่นั่ง | Deluxe Van = H1 / Staria / Majesty
             </p>
           </div>
 
@@ -140,7 +146,7 @@ export default function AirportTransferPage() {
                   </div>
                 </div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {['ผู้โดยสาร 1–3 คน', 'กระเป๋าใหญ่ 2–3 ใบ', 'เหมาะรับส่งสนามบิน ธุรกิจ', 'ราคาเริ่มต้น ฿1,000', 'คล่องตัว เข้าซอยง่าย'].map((item, i) => (
+                  {['ผู้โดยสาร 1–3 คน', 'กระเป๋าใหญ่ 2–3 ใบ', 'เหมาะรับส่งสนามบิน ธุรกิจ', 'ราคาเริ่มต้น ฿1,300', 'คล่องตัว เข้าซอยง่าย'].map((item, i) => (
                     <li key={i} style={{ fontSize: 14, color: '#D1D5DB', display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ color: '#10B981', fontSize: 14 }}>✓</span> {item}
                     </li>
@@ -164,7 +170,7 @@ export default function AirportTransferPage() {
                   </div>
                 </div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {['ผู้โดยสาร 4–13 คน', 'กระเป๋าใหญ่ 5–10 ใบ', 'เหมาะครอบครัว กรุ๊ปทัวร์', 'ราคาเริ่มต้น ฿1,500', 'พื้นที่กว้าง เบาะ VIP'].map((item, i) => (
+                  {['ผู้โดยสาร 4–13 คน', 'กระเป๋าใหญ่ 5–10 ใบ', 'เหมาะครอบครัว กรุ๊ปทัวร์', 'ราคาเริ่มต้น ฿1,200', 'พื้นที่กว้าง เบาะ VIP'].map((item, i) => (
                     <li key={i} style={{ fontSize: 14, color: '#D1D5DB', display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ color: '#C6A75E', fontSize: 14 }}>✓</span> {item}
                     </li>

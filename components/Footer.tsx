@@ -99,11 +99,12 @@ export default function Footer() {
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { label: '🚐 เช่ารถตู้ VIP พร้อมคนขับ', href: '#fleet' },
-              { label: '✈️ รับส่งสนามบิน', href: '#airport' },
-              { label: '🏖️ ท่องเที่ยวทั่วไทย', href: '#fleet' },
-              { label: '💼 รับส่งผู้บริหาร', href: '#fleet' },
-              { label: '🏢 รับส่งพนักงานบริษัท', href: '#fleet' },
+              { label: '🚐 เช่ารถตู้ VIP พร้อมคนขับ', href: '/fleet' },
+              { label: '✈️ รับส่งสนามบิน กรุงเทพ', href: '/airport-transfer' },
+              { label: '✈️ รับส่งสนามบิน เชียงใหม่', href: '/chiangmai-airport-transfer' },
+              { label: '✈️ รับส่งสนามบิน ภูเก็ต', href: '/phuket-airport-transfer' },
+              { label: '✈️ รับส่งสนามบิน หาดใหญ่', href: '/hatyai-airport-transfer' },
+              { label: '💼 รับส่งผู้บริหาร', href: '/fleet' },
             ].map((link, i) => (
               <a
                 key={i} href={link.href}

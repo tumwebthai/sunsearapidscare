@@ -25,8 +25,10 @@ export default function Navbar() {
   const links = [
     { label: 'รถของเรา', href: '/fleet' },
     { label: 'รับส่งสนามบิน', href: '/airport-transfer' },
+    { label: 'สนามบินเชียงใหม่', href: '/chiangmai-airport-transfer' },
+    { label: 'สนามบินภูเก็ต', href: '/phuket-airport-transfer' },
+    { label: 'สนามบินหาดใหญ่', href: '/hatyai-airport-transfer' },
     { label: 'เกี่ยวกับเรา', href: '/about' },
-    { label: 'รีวิว', href: '/#reviews' },
     { label: 'FAQ', href: '/faq' },
   ]
 

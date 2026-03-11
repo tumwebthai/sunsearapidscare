@@ -7,14 +7,14 @@ import RevealSection from './RevealSection'
 
 export default function FleetSection() {
   const fleet = [
-    { slug: 'toyota-commuter-vip', image: '/images/fleet/toyota-commuter-vip.webp', badge: 'ยอดนิยม', type: 'VIP', name: 'Toyota Commuter All New', desc: 'รถตู้ VIP สุดหรู เบาะปรับนอนได้ เหมาะสำหรับทริปท่องเที่ยวและงานบริษัท', seats: 9, bags: 9, price: '3,000', badgeColor: '#C6A75E' },
+    { slug: 'toyota-commuter-vip', image: '/images/fleet/toyota-commuter-vip.webp', badge: 'ยอดนิยม', type: 'VIP', name: 'Toyota Commuter All New', desc: 'รถตู้ VIP สุดหรู เบาะปรับนอนได้ เหมาะสำหรับทริปท่องเที่ยวและงานบริษัท', seats: 9, bags: 9, price: '4,200', badgeColor: '#C6A75E' },
     { slug: 'toyota-commuter-standard', image: '/images/fleet/toyota-commuter-standard.webp', badge: 'ประหยัด', type: 'Standard', name: 'Toyota Commuter All New', desc: 'รถตู้มาตรฐาน จุคนได้เยอะ เหมาะสำหรับหมู่คณะและรับส่งพนักงาน', seats: 13, bags: 10, price: '1,800', badgeColor: '#3B82F6' },
-    { slug: 'hyundai-h1-vip', image: '/images/fleet/hyundai-h1-vip.webp', badge: 'VIP', type: 'VIP', name: 'Hyundai H1', desc: 'หรูหรา นั่งสบาย เหมาะสำหรับผู้บริหารและครอบครัวเล็ก', seats: 5, bags: 4, price: '2,500', badgeColor: '#C6A75E' },
+    { slug: 'hyundai-h1-vip', image: '/images/fleet/hyundai-h1-vip.webp', badge: 'VIP', type: 'VIP', name: 'Hyundai H1', desc: 'หรูหรา นั่งสบาย เหมาะสำหรับผู้บริหารและครอบครัวเล็ก', seats: 5, bags: 4, price: '6,300', badgeColor: '#C6A75E' },
     { slug: 'toyota-alphard-executive', image: '/images/fleet/toyota-alphard-executive.webp', badge: 'Executive', type: 'Executive', name: 'Toyota Alphard', desc: 'ระดับ Executive สำหรับผู้บริหารและแขก VIP ความเป็นส่วนตัวสูงสุด', seats: 4, bags: 3, price: '4,500', badgeColor: '#7C3AED' },
-    { slug: 'toyota-majesty-premium', image: '/images/fleet/toyota-majesty-premium.webp', badge: 'Premium', type: 'Premium', name: 'Toyota Majesty', desc: 'พรีเมียมแวน นั่งสบาย ดีไซน์หรู ทริปครอบครัวและกลุ่มเล็ก', seats: 7, bags: 5, price: '3,500', badgeColor: '#C6A75E' },
-    { slug: 'hyundai-staria-luxury', image: '/images/fleet/hyundai-staria-luxury.webp', badge: 'Luxury', type: 'Luxury', name: 'Hyundai Staria', desc: 'แวนหรูดีไซน์แห่งอนาคต นั่งสบายระดับ First Class', seats: 7, bags: 5, price: '3,500', badgeColor: '#DC2626' },
-    { slug: 'honda-accord', image: '/images/fleet/honda-accord-sedan.webp', badge: 'Sedan', type: 'Sedan', name: 'Honda Accord', desc: 'รถเก๋งหรูพร้อมคนขับมืออาชีพ เหมาะสำหรับลูกค้า 1–3 คน รับส่งสนามบิน ประชุม และเดินทางธุรกิจ', seats: 3, bags: 3, price: '1,800', badgeColor: '#10B981' },
-    { slug: 'toyota-camry', image: '/images/fleet/toyota-camry-sedan.webp', badge: 'Executive', type: 'Sedan', name: 'Toyota Camry', desc: 'ซีดานระดับ Executive หรูหราและเงียบสนิท เหมาะสำหรับผู้บริหาร นักธุรกิจ และแขก VIP 1–3 คน', seats: 3, bags: 3, price: '2,000', badgeColor: '#7C3AED' },
+    { slug: 'toyota-majesty-premium', image: '/images/fleet/toyota-majesty-premium.webp', badge: 'Premium', type: 'Premium', name: 'Toyota Majesty', desc: 'พรีเมียมแวน นั่งสบาย ดีไซน์หรู ทริปครอบครัวและกลุ่มเล็ก', seats: 7, bags: 5, price: '6,300', badgeColor: '#C6A75E' },
+    { slug: 'hyundai-staria-luxury', image: '/images/fleet/hyundai-staria-luxury.webp', badge: 'Luxury', type: 'Luxury', name: 'Hyundai Staria', desc: 'แวนหรูดีไซน์แห่งอนาคต นั่งสบายระดับ First Class', seats: 7, bags: 5, price: '6,300', badgeColor: '#DC2626' },
+    { slug: 'honda-accord', image: '/images/fleet/honda-accord-sedan.webp', badge: 'Sedan', type: 'Sedan', name: 'Honda Accord', desc: 'รถเก๋งหรูพร้อมคนขับมืออาชีพ เหมาะสำหรับลูกค้า 1–3 คน รับส่งสนามบิน ประชุม และเดินทางธุรกิจ', seats: 3, bags: 3, price: '5,000', badgeColor: '#10B981' },
+    { slug: 'toyota-camry', image: '/images/fleet/toyota-camry-sedan.webp', badge: 'Executive', type: 'Sedan', name: 'Toyota Camry', desc: 'ซีดานระดับ Executive หรูหราและเงียบสนิท เหมาะสำหรับผู้บริหาร นักธุรกิจ และแขก VIP 1–3 คน', seats: 3, bags: 3, price: '5,000', badgeColor: '#7C3AED' },
   ]
 
   const scrollRef = useRef<HTMLDivElement>(null)

@@ -4,8 +4,8 @@ import RevealSection from './RevealSection'
 
 export default function AirportSection() {
   const routes = [
-    { from: 'สุวรรณภูมิ (BKK)', to: 'กรุงเทพ ในเมือง', time: '~45 นาที', sedan: '1,200', van: '1,800' },
-    { from: 'สุวรรณภูมิ (BKK)', to: 'พัทยา', time: '~2 ชม.', sedan: '2,000', van: '2,800' },
+    { from: 'สุวรรณภูมิ (BKK)', to: 'กรุงเทพ ในเมือง', time: '~45 นาที', sedan: '1,300', commuter: '1,200', van: '2,300' },
+    { from: 'สุวรรณภูมิ (BKK)', to: 'พัทยา (ไม่เกินสวนนงนุช)', time: '~2 ชม.', sedan: '3,200', commuter: '2,000', van: '4,400' },
     { from: 'สุวรรณภูมิ (BKK)', to: 'หัวหิน', time: '~3 ชม.', sedan: '3,000', van: '4,000' },
     { from: 'สุวรรณภูมิ (BKK)', to: 'เขาใหญ่', time: '~3 ชม.', sedan: '3,200', van: '4,200' },
     { from: 'ดอนเมือง (DMK)', to: 'กรุงเทพ ในเมือง', time: '~40 นาที', sedan: '1,000', van: '1,500' },
@@ -44,21 +44,34 @@ export default function AirportSection() {
                     🕐 {r.time}
                   </span>
                 </div>
-                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 4, letterSpacing: 0.5, fontWeight: 600 }}>🚗 Sedan</div>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: '#F5F5F5' }}>฿{r.sedan}</div>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: '#F5F5F5' }}>฿{r.sedan}</div>
                   </div>
+                  {r.commuter && (
+                    <>
+                      <div style={{ width: 1, height: 36, background: 'rgba(198,167,94,0.15)' }} />
+                      <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 11, color: '#10B981', marginBottom: 4, letterSpacing: 0.5, fontWeight: 600 }}>🚐 Commuter</div>
+                        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: '#10B981' }}>฿{r.commuter}</div>
+                      </div>
+                    </>
+                  )}
                   <div style={{ width: 1, height: 36, background: 'rgba(198,167,94,0.15)' }} />
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 11, color: '#C6A75E', marginBottom: 4, letterSpacing: 0.5, fontWeight: 600 }}>🚐 VAN</div>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: '#C6A75E' }}>฿{r.van}</div>
+                    <div style={{ fontSize: 11, color: '#C6A75E', marginBottom: 4, letterSpacing: 0.5, fontWeight: 600 }}>🚐 Deluxe Van</div>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: '#C6A75E' }}>฿{r.van}</div>
                   </div>
                 </div>
               </div>
             </RevealSection>
           ))}
         </div>
+
+        <p style={{ fontSize: 13, color: '#9CA3AF', marginTop: 16, textAlign: 'center', lineHeight: 1.7 }}>
+          ราคารวมค่าน้ำมัน ค่าทางด่วน และค่าจอดรถแล้ว | ไม่มีค่าใช้จ่ายเพิ่มเติม
+        </p>
 
         <RevealSection delay={0.4}>
           <div style={{ textAlign: 'center', marginTop: 40 }}>
